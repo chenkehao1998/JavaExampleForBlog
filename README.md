@@ -39,4 +39,4 @@ $ git pull origin main --depth=1
 
 ## 我的博客
 
-[[克豪的博客_CSDN博客](https://blog.csdn.net/qq754772661)](https://blog.csdn.net/qq754772661)
+[克豪的博客_CSDN博客](https://blog.csdn.net/qq754772661)
