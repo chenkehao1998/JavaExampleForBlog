@@ -10,11 +10,23 @@ import org.apache.shiro.subject.PrincipalCollection;
 
 public class MyRealm extends AuthorizingRealm {
     /**
-     * 用于授权的函数 先暂时不实现
+     * 用于授权的函数
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        return null;
+        //获取到用户名
+        String primaryPrincipal = (String) principals.getPrimaryPrincipal();
+        //根据用户名的得到相应的权限，应该是从数据库中获取，这里假装获取到了
+        SimpleAccount simpleAccount = new SimpleAccount();
+        //给当前用户添加角色
+        simpleAccount.addRole("admin");
+        simpleAccount.addRole("user");
+
+        //给当前用户添加权限
+        simpleAccount.addStringPermission("eat");
+        simpleAccount.addStringPermission("drink");
+
+        return simpleAccount;
     }
 
     /**

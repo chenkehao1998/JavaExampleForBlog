@@ -25,12 +25,24 @@ public class MD5RealmTest {
         Subject subject = SecurityUtils.getSubject();
 
         UsernamePasswordToken token = new UsernamePasswordToken("chenkehao","123456");
-        System.out.println("被授权："+subject.isAuthenticated());
+        System.out.println("被认证："+subject.isAuthenticated());
         try {
             subject.login(token);
         }catch (Exception e){
             e.printStackTrace();
         }
-        System.out.println("被授权："+subject.isAuthenticated());
+        System.out.println("被认证："+subject.isAuthenticated());
+
+
+        //认证之后
+        if(subject.isAuthenticated()){
+            System.out.println(subject.hasRole("admin"));
+            System.out.println(subject.hasRole("user1"));
+
+            System.out.println(subject.isPermitted("food:eat:orange"));
+            System.out.println(subject.isPermitted("water:drink:tea"));
+            System.out.println(subject.isPermitted("water:drink:juice"));
+        }
+
     }
 }

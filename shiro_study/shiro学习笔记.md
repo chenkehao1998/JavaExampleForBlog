@@ -167,16 +167,97 @@ public class MD5RealmTest {
         Subject subject = SecurityUtils.getSubject();
 
         UsernamePasswordToken token = new UsernamePasswordToken("chenkehao","123456");
-        System.out.println("被授权："+subject.isAuthenticated());
+        System.out.println("被认证："+subject.isAuthenticated());
         try {
             subject.login(token);
         }catch (Exception e){
             e.printStackTrace();
         }
-        System.out.println("被授权："+subject.isAuthenticated());
+        System.out.println("被认证："+subject.isAuthenticated());
     }
 }
 ```
 
 
+
+# 授权
+
+授权可简单理解为用户对资源进行哪种操作：
+
+![](shiro学习笔记.assets/2776d1da95d468069505ec23d87fe23e.png)
+
+## 权限字符串
+
+ 权限字符串的规则是：资源标识符：操作：资源实例标识符
+
+意思是对哪个资源的哪个实例具有什么操作，“:”是资源/操作/实例的分割符，权限字符串也可以使用*通配符。
+
+- 编程式
+
+```java
+Subject subject = SecurityUtils.getSubject();
+if(subject.hasRole(“admin”)) {
+	//有权限
+} else {
+	//无权限
+}
+
+```
+
+- 注解式
+
+```java
+@RequiresRoles("admin")
+public void hello() {
+	//有权限
+}
+```
+
+- 标签式
+
+```xml
+JSP/GSP 标签：在JSP/GSP 页面通过相应的标签完成：
+<shiro:hasRole name="admin">
+	<!-- 有权限-->
+</shiro:hasRole>
+```
+
+> 注意: Thymeleaf 中使用shiro需要额外集成!
+
+## 案例程序
+
+- realm中授权的实现
+
+```java
+@Override
+protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+    //获取到用户名
+    String primaryPrincipal = (String) principals.getPrimaryPrincipal();
+    //根据用户名的得到相应的权限，应该是从数据库中获取，这里假装获取到了
+    SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+    //给当前用户添加角色
+    simpleAuthorizationInfo.addRole("admin");
+    simpleAuthorizationInfo.addRole("user");
+
+    //给当前用户添加权限
+    simpleAuthorizationInfo.addStringPermission("food:eat:*");
+    simpleAuthorizationInfo.addStringPermission("water:drink:tea");
+
+    return simpleAuthorizationInfo;
+}
+```
+
+查看是否被授权
+
+```java
+//认证之后
+if(subject.isAuthenticated()){
+    System.out.println(subject.hasRole("admin"));
+    System.out.println(subject.hasRole("user1"));
+
+    System.out.println(subject.isPermitted("food:eat:orange"));
+    System.out.println(subject.isPermitted("water:drink:tea"));
+    System.out.println(subject.isPermitted("water:drink:juice"));
+}
+```
 
