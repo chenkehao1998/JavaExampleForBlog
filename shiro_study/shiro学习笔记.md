@@ -184,8 +184,6 @@ public class MD5RealmTest {
 
 授权可简单理解为用户对资源进行哪种操作：
 
-![](shiro学习笔记.assets/2776d1da95d468069505ec23d87fe23e.png)
-
 ## 权限字符串
 
  权限字符串的规则是：资源标识符：操作：资源实例标识符
@@ -226,7 +224,7 @@ JSP/GSP 标签：在JSP/GSP 页面通过相应的标签完成：
 
 ## 案例程序
 
-- realm中授权的实现
+- realm中授权的实现（此处实现的是`MyMD5Realm`类的`doGetAuthorizationInfo`方法）
 
 ```java
 @Override
